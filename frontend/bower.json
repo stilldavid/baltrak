@@ -1,0 +1,27 @@
+{
+  "name": "baltrak",
+  "homepage": "https://github.com/stilldavid/home",
+  "authors": [
+    "Dave Stillman <me@stilldavid.com>"
+  ],
+  "description": "Balloon tracking",
+  "main": "index.js",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "Leaflet.Coordinates": "^0.1.5",
+    "leaflet": "^0.7.7",
+    "jquery": "^2.2.0",
+    "moment": "^2.11.2"
+  }
+}
