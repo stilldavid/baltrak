@@ -6,16 +6,43 @@
   <body>
     <div id=comms>
       <div class=inner>
-        <h3>tracker</h3>
+        <h3>tracker<sup>beta!!</sup></h3>
         <p>
-          <span id=spd>----</span>m/s<br>
+          <span class=title>speed</span><br>
+          <span id=spd>-.-</span>m/s<br>
+        </p>
+        <p>
+          <span class=title>position</span><br>
           <span id=lat>--.----</span>, <span id=lng>--.----</span><br>
+        </p>
+        <p>
+          <span class=title>altitude</span><br>
           <span id=alt>----</span>m<br>
         </p>
+        <p>
+          <span class=title>payload temp</span><br>
+          <span id=tmpint>--</span>°C<br>
+        </p>
+        <p>
+          <span class=title>outside temp</span><br>
+          <span id=tmpext>--</span>°C<br>
+        </p>
+        <p>
+          <span class=title>payload voltage</span><br>
+          <span id=volts>--</span>V<br>
+        </p>
       </div>
+
       <div id=bottom>
         <div class=inner>
+        <p>
+          <span class=title>last rssi</span><br>
+          <span id=rssi>--</span>dB<br>
+        </p>
+        <p>
+          <span class=title>last heard from...</span><br>
           <span id=lastupdate>--</span> seconds ago
+        </p>
         </div>
       </div>
     </div>

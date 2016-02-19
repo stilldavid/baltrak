@@ -7,8 +7,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
 
 	"github.com/tarm/goserial"
 )
@@ -38,14 +36,6 @@ func listenToSerial(s *io.ReadWriteCloser, h *hub) {
 func main() {
 	port := flag.String("port", "/dev/cu.usbmodem1411", "Serial port device (defaults to /dev/cu.usbmodem1411)")
 	flag.Parse()
-
-	// Spin off a goroutine to watch for a SIGINT and die if we get one
-	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt)
-	go func() {
-		<-sig
-		os.Exit(1)
-	}()
 
 	c := &serial.Config{Name: *port, Baud: 9600}
 	s, err := serial.OpenPort(c)

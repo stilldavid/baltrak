@@ -13837,10 +13837,15 @@ serversocket.onmessage = function(e) {
   var obj = jQuery.parseJSON(e.data);
   polyline.addLatLng([obj.lat, obj.lng]);
 
+  $('#rssi').text(obj.rssi);
+  $('#count').text(obj.count);
   $('#lat').text(obj.lat);
   $('#lng').text(obj.lng);
-  $('#spd').text(obj.spd);
   $('#alt').text(obj.alt);
+  $('#spd').text(obj.spd);
+  $('#tmpint').text(obj.tmpint);
+  $('#tmpext').text(obj.tmpext);
+  $('#volts').text(obj.volts);
 
   // update the timer
   lastUpdate = moment();

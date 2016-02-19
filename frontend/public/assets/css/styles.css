@@ -475,7 +475,12 @@ body {
   padding: 0; }
 
 p {
-  line-height: 1.5em; }
+  margin: 0.5em 0;
+  line-height: 1.2em; }
+
+.title {
+  font-size: 85%;
+  color: gray; }
 
 #map {
   height: 100%;

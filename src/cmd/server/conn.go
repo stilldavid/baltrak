@@ -9,10 +9,15 @@ import (
 )
 
 type tosend struct {
-	Lat float64 `json:"lat"`
-	Lng float64 `json:"lng"`
-	Spd float64 `json:"spd"`
-	Alt float64 `json:"alt"`
+	Rssi  float64 `json:"rssi"`
+	Count int     `json:"count"`
+	Lat   float64 `json:"lat"`
+	Lng   float64 `json:"lng"`
+	Alt   float64 `json:"alt"`
+	Spd   float64 `json:"spd"`
+	Tmpi  float64 `json:"tmpint"`
+	Tmpo  float64 `json:"tmpext"`
+	Volts float64 `json:"volts"`
 }
 
 type connection struct {
@@ -37,28 +42,55 @@ func (c *connection) reader() {
 	c.ws.Close()
 }
 
+// -21,2,40.037207,-105.263775,1633.70,0.55,26.83,21.50,4.10
 func (c *connection) writer() {
 	for message := range c.send {
 
 		split := strings.Split(string(message), ",")
-		lat, err := strconv.ParseFloat(split[0], 64)
+
+		if len(split) != 9 {
+			log.Println("wrong number of params.")
+			return
+		}
+
+		rssi, err := strconv.ParseFloat(split[0], 64)
 		if err != nil {
 			log.Fatal("can't parse lat")
 		}
-		lng, err := strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
+		count, err := strconv.Atoi(split[1])
+		if err != nil {
+			log.Fatal("can't parse lat")
+		}
+		lat, err := strconv.ParseFloat(split[2], 64)
+		if err != nil {
+			log.Fatal("can't parse lat")
+		}
+		lng, err := strconv.ParseFloat(split[3], 64)
 		if err != nil {
 			log.Fatal("can't parse lng")
 		}
-		alt, err := strconv.ParseFloat(strings.TrimSpace(split[2]), 64)
+		alt, err := strconv.ParseFloat(split[4], 64)
 		if err != nil {
 			log.Fatal("can't parse lng")
 		}
-		spd, err := strconv.ParseFloat(strings.TrimSpace(split[3]), 64)
+		spd, err := strconv.ParseFloat(split[5], 64)
+		if err != nil {
+			log.Fatal("can't parse lng")
+		}
+		itmp, err := strconv.ParseFloat(split[6], 64)
+		if err != nil {
+			log.Fatal("can't parse lng")
+		}
+		etmp, err := strconv.ParseFloat(strings.TrimSpace(split[7]), 64)
+		if err != nil {
+			log.Fatal("can't parse lng")
+		}
+		volts, err := strconv.ParseFloat(strings.TrimSpace(split[8]), 64)
 		if err != nil {
 			log.Fatal("can't parse lng")
 		}
 
-		tosend := tosend{lat, lng, spd, alt}
+		tosend := tosend{rssi, count, lat, lng, alt, spd, itmp, etmp, volts}
 
 		err = c.ws.WriteJSON(tosend)
 		if err != nil {
