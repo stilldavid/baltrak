@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -11,24 +10,17 @@ import (
 	"github.com/tarm/goserial"
 )
 
-func echoHandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	c := &connection{send: make(chan []byte, 256), ws: conn}
-	go c.writer()
-}
-
 func listenToSerial(s *io.ReadWriteCloser, h *hub) {
 	for {
 		reader := bufio.NewReader(*s)
+
+		// read until newline
 		reply, err := reader.ReadBytes('\x0a')
 		if err != nil {
+			// could do this more gracefully...
 			panic(err)
 		}
+
 		h.broadcast <- reply
 	}
 }
@@ -52,7 +44,8 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./frontend/public/")))
 	http.Handle("/ws", wsHandler{h: h})
+	http.HandleFunc("/tiles/", tileHandler)
 	if err := http.ListenAndServe("localhost:3000", nil); err != nil {
-		log.Fatal("ListenAndServe:", err)
+		log.Fatal("server error:", err)
 	}
 }
