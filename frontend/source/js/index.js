@@ -8,7 +8,6 @@ L.tileLayer('http://localhost:3000/tiles/{z}/{x}/{y}.png', {
 var latlngs = [];
 var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
 
-
 // zoom the map to the polyline
 //map.fitBounds(polyline.getBounds());
 
@@ -48,11 +47,21 @@ serversocket.onmessage = function(e) {
   $('#lng').text(obj.lng);
   $('#alt').text(obj.alt);
   $('#spd').text(obj.spd);
+  $('#spdmph').text((obj.spd * 2.236).toFixed(1));
   $('#tmpint').text(obj.tmpint);
   $('#tmpext').text(obj.tmpext);
+  $('#press').text(obj.press);
   $('#volts').text(obj.volts);
 
   // update the timer
   lastUpdate = moment();
 };
 
+// pull in history
+$.getJSON('/history.json', function(data) {
+  $.each(data.history, function( key, val ) {
+    if(0 !=val.lag && 0 != val.lng) {
+      polyline.addLatLng([val.lat, val.lng]);
+    }
+  });
+});
