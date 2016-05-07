@@ -55,22 +55,26 @@ func tileHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("can't parse z")
 		http.NotFound(w, r)
+		return
 	}
 	x, err := strconv.Atoi(split[1])
 	if err != nil {
 		fmt.Println("can't parse x")
 		http.NotFound(w, r)
+		return
 	}
 	y, err := strconv.Atoi(strings.Trim(split[2], ".png"))
 	if err != nil {
 		fmt.Println("can't parse y", strings.Trim(split[3], ".png"))
 		http.NotFound(w, r)
+		return
 	}
 
 	err = downloadTile(z, x, y)
 	if err != nil {
 		fmt.Println(err)
 		http.NotFound(w, r)
+		return
 	}
 
 	http.ServeFile(w, r, "tiles/"+path)
