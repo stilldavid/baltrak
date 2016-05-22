@@ -50,14 +50,16 @@ gulp.task('build-js', function() {
     .pipe(gulp.dest(output.javascript));
 });
 
-gulp.task('copy-html', function() {
+gulp.task('copy', function() {
   // copy any html files in source/ to public/
   gulp.src('source/*.html').pipe(gulp.dest('public'));
+
+  gulp.src('bower_components/leaflet/dist/images/*.png').pipe(gulp.dest('public/assets/img'));
 });
 
 /* Watch these files for changes and run the task on update */
 gulp.task('watch', function() {
   gulp.watch(input.javascript, ['jshint', 'build-js']);
-  gulp.watch(input.html, ['copy-html']);
+  gulp.watch(input.html, ['copy']);
   gulp.watch(input.sass, ['build-css']);
 });
