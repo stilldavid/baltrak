@@ -10,16 +10,18 @@ import (
 )
 
 type sentence struct {
-	Rssi  float64 `json:"rssi"`
-	Count int     `json:"count"`
-	Lat   float64 `json:"lat"`
-	Lng   float64 `json:"lng"`
-	Alt   float64 `json:"alt"`
-	Spd   float64 `json:"spd"`
-	Tmpi  float64 `json:"tmpint"`
-	Tmpo  float64 `json:"tmpext"`
-	Press float64 `json:"press"`
-	Volts float64 `json:"volts"`
+	Rssi      float64 `json:"rssi"`
+	Count     int     `json:"count"`
+	Lat       float64 `json:"lat"`
+	Lng       float64 `json:"lng"`
+	Alt       float64 `json:"alt"`
+	Spd       float64 `json:"spd"`
+	Tmpi      float64 `json:"tmpint"`
+	Tmpo      float64 `json:"tmpext"`
+	Press     float64 `json:"press"`
+	Volts     float64 `json:"volts"`
+	Chase_lat float64 `json:"chase_lat"`
+	Chase_lng float64 `json:"chase_lng"`
 }
 
 // -21,2,40.037207,-105.263775,1633.70,0.55,26.83,21.50,pascal,4.10
@@ -27,18 +29,18 @@ func parseSentence(message []byte) sentence {
 
 	split := strings.Split(string(message), ",")
 
-	if len(split) != 10 {
+	if len(split) != 12 {
 		log.Println("wrong number of params.")
 		return sentence{}
 	}
 
 	rssi, err := strconv.ParseFloat(split[0], 64)
 	if err != nil {
-		log.Fatal("can't parse lat")
+		log.Fatal("can't parse rssi")
 	}
 	count, err := strconv.Atoi(split[1])
 	if err != nil {
-		log.Fatal("can't parse lat")
+		log.Fatal("can't parse count")
 	}
 	lat, err := strconv.ParseFloat(split[2], 64)
 	if err != nil {
@@ -50,30 +52,38 @@ func parseSentence(message []byte) sentence {
 	}
 	alt, err := strconv.ParseFloat(split[4], 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse alt")
 	}
 	spd, err := strconv.ParseFloat(split[5], 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse speed")
 	}
 	itmp, err := strconv.ParseFloat(split[6], 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse internal temp")
 	}
 	etmp, err := strconv.ParseFloat(strings.TrimSpace(split[7]), 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse out temp")
 	}
 	press, err := strconv.ParseFloat(strings.TrimSpace(split[8]), 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse pressure")
 	}
 	volts, err := strconv.ParseFloat(strings.TrimSpace(split[9]), 64)
 	if err != nil {
-		log.Fatal("can't parse lng")
+		log.Fatal("can't parse voltage")
+	}
+	chase_lat, err := strconv.ParseFloat(strings.TrimSpace(split[10]), 64)
+	if err != nil {
+		log.Fatal("can't parse voltage")
+	}
+	chase_lng, err := strconv.ParseFloat(strings.TrimSpace(split[11]), 64)
+	if err != nil {
+		log.Fatal("can't parse voltage")
 	}
 
-	ret := sentence{rssi, count, lat, lng, alt, spd, itmp, etmp, press, volts}
+	ret := sentence{rssi, count, lat, lng, alt, spd, itmp, etmp, press, volts, chase_lat, chase_lng}
 
 	return ret
 }
