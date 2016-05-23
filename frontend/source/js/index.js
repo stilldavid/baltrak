@@ -46,7 +46,7 @@ var lastUpdate = moment();
 setInterval(function() {
   var ago = moment().diff(lastUpdate, 'seconds');
   $('#lastupdate').text(ago);
-}, 1000);
+}, 100);
 
 // set up a web socket
 var serversocket = new WebSocket("ws://localhost:3000/ws");
